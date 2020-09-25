@@ -1,6 +1,7 @@
 function results = tracker(params)
 %% Initialization
 % Get sequence info
+admm_lambda_3 = params.admm_lambda_3;
 admm_lambda_2 = params.admm_lambda_2;
 admm_lambda = params.admm_lambda;
 [seq, im] = get_sequence_info(params.seq);
@@ -190,7 +191,8 @@ scores_fs_feat = cell(1,1,3);
 T = prod(filter_sz_cell_ours{1});
 xt{1} = single(zeros(filter_sz_cell_ours{1}(1),filter_sz_cell_ours{1}(2),42));
 q_finit = single(zeros(filter_sz_cell_ours{1}(1),filter_sz_cell_ours{1}(2),42));
-
+beta_0 = ones(1,1,42);
+beta_k = beta_0;
 xtw = xt;
 xtf = xt;
 xl = xt;
@@ -289,7 +291,7 @@ while true
             [id_ymax_curr, id_xmax_curr] = find(M_curr == max_M_curr);
             % do shifting of previous response map 1
             for i = 1:params.F
-                shift_y = 1 - id_ymax_prev{i};
+                shift_y = 1 - id_ymax_prev{i};%直接把最大值移位到（1，1），与y一致
                 shift_x = 1 - id_xmax_prev{i};
                 sz_shift_y = size(shift_y);
                 sz_shift_x = size(shift_x);
@@ -306,7 +308,7 @@ while true
             iter = iter + 1;
         end
     end
-        
+       
     
 
     %% Model update step
@@ -333,7 +335,7 @@ while true
             betha = 10;
             mumax = 10000;
             i = 1;
-            
+            beta_k = beta_0; %通道权重初始化  所有通道设为1
             
             S_xx = sum(conj(model_xf) .* model_xf, 3);
             M_t = fft2(2 * M_prev{1} - M_prev{2});
@@ -350,12 +352,14 @@ while true
                     bsxfun(@rdivide,((1/T)*(bsxfun(@times, model_xf, (S_xx .* (yf+M_train)))) -  bsxfun(@times, model_xf, S_lx) + mu * (bsxfun(@times, model_xf, S_hx))), B));
 
                 %   solve for G
-                g = (T / (mu * T+  admm_lambda)) * ifft2((mu*q_f) + l_f);
+                g = (T / (mu * T+  admm_lambda * beta_k)) .* ifft2((mu*q_f) + l_f);
                 [sx,sy,g] = get_subwindow_no_window(g, floor(filter_sz_cell_ours{k}/2) , small_filter_sz{k});
                 t = zeros(filter_sz_cell_ours{k}(1), filter_sz_cell_ours{k}(2), size(g,3));
                 t(sx,sy,:) = g;
                 h_f = fft2(t);
                 
+                % solve for β
+                beta_k = admm_lambda_3 * beta_0 ./ (admm_lambda * sum(sum(t .* t, 2), 1) + admm_lambda_3);
 
                 
                 %   update L
@@ -365,7 +369,14 @@ while true
                 mu = min(betha * mu, mumax);
                 i = i+1;
             end
-            
+%             reg_norm = 0.5 * norm(yf - sum(model_xf .* q_f, 3), 2)
+%             lambda1_norm = 0;
+%             for iii = 1: 42
+%                 lambda1_norm = lambda1_norm+ admm_lambda/2 * norm(beta_k(:, :, iii) .* q_f(:, :, iii), 2);
+%             end
+%             lambda1_norm
+%             lambda2_norm = admm_lambda_2/2 * norm(M_train - sum(model_xf .* q_f, 3), 2)
+%             lambda3_norm = admm_lambda_3/2 * norm(permute(beta_k,[2,3,1]) - permute(beta_0,[2,3,1]), 2)
             cf_f{k} = q_f;  
     end
     if(seq.frame == 1)
