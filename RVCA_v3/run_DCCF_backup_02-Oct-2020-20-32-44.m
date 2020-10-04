@@ -69,9 +69,9 @@ params.learning_rate_2 = 0.0202;%0.019;
 
 params.F = 2;%historical interval length
 
-params.mu = 0.83;%0.844
+params.mu = 1;%0.844
 params.admm_lambda =  0.01;%Regularization parameter
-params.admm_lambda_2 = 0.42;
+params.admm_lambda_2 = 0.41;
 params.admm_lambda_3 = 47.4;
 
 params.admm_iterations = 3;%Number of ADMM iterations
@@ -83,7 +83,7 @@ if isfield(seq, 'tuning_param')
 %     params.learning_rate_2 = seq.tuning_param(1);
 %     params.mu = seq.tuning_param(3);% 
 %     params.admm_lambda = seq.tuning_param(2);
-    params.mu = seq.tuning_param(1);
+    params.admm_lambda_2 = seq.tuning_param(1);
 %     params.admm_lambda_3 = seq.tuning_param(3);
 end
 

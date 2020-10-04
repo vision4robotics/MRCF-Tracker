@@ -56,40 +56,40 @@ params.penalty_scale_step = [10, 10];
 
 params.num_scales = 33;
 params.hog_scale_cell_size = 4;
-params.learning_rate_scale = 0.025;%seq.spatial;%0.025;
+params.learning_rate_scale = 0.0245;%seq.spatial;%0.025;
 params.scale_sigma_factor = 0.5;%1/2;
 params.scale_model_factor = 1.0;
 params.scale_step = 1.03;
 params.scale_model_max_area = 32*16;
 params.scale_lambda = 1e-4;
 
-params.learning_rate_1 = 0.0202;%0.0131;
-params.learning_rate_2 = 0.0202;%0.019;
+params.learning_rate_1 = 0.0131;
+params.learning_rate_2 = 0.019;
 
 
 params.F = 2;%historical interval length
 
-params.mu = 0.83;%0.844
+params.mu = 1;%0.844
 params.admm_lambda =  0.01;%Regularization parameter
-params.admm_lambda_2 = 0.42;
-params.admm_lambda_3 = 47.4;
+params.admm_lambda_2 = 0.43;
+params.admm_lambda_3 = 0.43;
 
 params.admm_iterations = 3;%Number of ADMM iterations
 
 % Test parameters
 if isfield(seq, 'tuning_param')
     % 在调参数
-%     params.learning_rate_1 = seq.tuning_param(1);
-%     params.learning_rate_2 = seq.tuning_param(1);
+    params.learning_rate_1 = seq.tuning_param(1);
+    params.learning_rate_2 = seq.tuning_param(1);
 %     params.mu = seq.tuning_param(3);% 
-%     params.admm_lambda = seq.tuning_param(2);
-    params.mu = seq.tuning_param(1);
+    params.admm_lambda = seq.tuning_param(2);
+    params.admm_lambda_3 = seq.tuning_param(3);
 %     params.admm_lambda_3 = seq.tuning_param(3);
 end
 
 
 % Visualization
-params.visualization = 0;               % Visualiza tracking and detection scores
+params.visualization = 1;               % Visualiza tracking and detection scores
 
 % GPU
 params.use_gpu = false;                 % Enable GPU or not
