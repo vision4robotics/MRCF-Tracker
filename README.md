@@ -4,7 +4,7 @@ Matlab implementation of our Response Deviation and Channel Reliability Aware Co
 
 | **Test passed**                                              |
 | ------------------------------------------------------------ |
-| [![matlab-2019b](https://img.shields.io/badge/matlab-2019b-yellow.svg)](https://www.mathworks.com/products/matlab.html) |
+| [![matlab-2019a](https://img.shields.io/badge/matlab-2019a-yellow.svg)](https://www.mathworks.com/products/matlab.html) |
 
 
 # Abstract 
