@@ -1,5 +1,5 @@
 
-%   This script runs the implementation of IBRI for visual tracking.
+%   This script runs the implementation of MRCF for visual tracking.
 %   Some functions are borrowed from other papers (SRDCF, UAV123 Benchmark)
 %   and their copyright belongs to the paper's authors.
 
@@ -7,7 +7,7 @@ clear; clc; close all;
 addpath(genpath('.'));
 
 pathAnno = '.\seq\';
-seqs = configSeqs_demo_for_RDCR;
+seqs = configSeqs_demo_for_MRCF;
 
 idx = 1;
 

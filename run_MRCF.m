@@ -1,10 +1,10 @@
-%   This function runs the IBRI tracker on the video specified in 
+%   This function runs the MRCF tracker on the video specified in 
 %   "configSeqs".
 %   This function is based on STRCF paper.
 %   Details of some parameters are not presented in the paper, you can
 %   refer to BACF/DSST/ECO paper for more details.
 
-function results = run_RDCR(seq, rp, bSaveImage)%                     加了正则项的IBRI
+function results = run_MRCF(seq, rp, bSaveImage)%                     加了正则项的IBRI
 % Feature specific parameters
 hog_params.cell_size = 4;
 hog_params.compressed_dim = 10;
@@ -45,8 +45,7 @@ params.newton_iterations = 5;           % The number of Newton iterations used f
 params.clamp_position = false;         % Clamp the target position to be inside the image
 
 % Learning parameters
-params.output_sigma_factor = 0.0625;% Label function sigma
-params.temporal_regularization_factor = [15 15]; % The temporal regularization parameters
+params.output_sigma_factor = 0.0625;	% Label function sigma
 
 % ADMM parameters
 params.max_iterations = [2 2];
@@ -56,21 +55,19 @@ params.penalty_scale_step = [10, 10];
 
 params.num_scales = 33;
 params.hog_scale_cell_size = 4;
-params.learning_rate_scale = 0.025;
+params.learning_rate_scale = 0.0255;
 params.scale_sigma_factor = 0.5;
 params.scale_model_factor = 1.0;
 params.scale_step = 1.03;
 params.scale_model_max_area = 32*16;
 params.scale_lambda = 1e-4;
 
-params.learning_rate_1 = 0.0198;
-params.learning_rate_2 = 0.0198;
+params.learning_rate = 0.0199;
 
-
-params.mu = 1;%0.844
-params.admm_lambda =  0.01;%Regularization parameter
-params.admm_lambda_2 = 2;
-params.admm_lambda_3 = 0.004;
+params.mu = 1;
+params.admm_lambda =  0.01;%Filter regularization
+params.admm_lambda_2 = 10;% Response Deviation Aware Regularization
+params.admm_lambda_3 = 0.004;%Channel Reliability Aware Regularization
 
 params.admm_iterations = 3;%Number of ADMM iterations
 

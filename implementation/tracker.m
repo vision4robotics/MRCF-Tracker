@@ -196,6 +196,11 @@ xl = xt;
 xlw = xt;
 xlf = xt;
 response_d = xt;
+% initialize previous response map
+% for i = 1:params.F
+%     M_prev{i} = zeros(filter_sz_cell{1});
+%     Prev_response_d{i} =  xt{1};
+% end
 Prev_response_d{1} =  xt{1};
 Prev_response_d{2} =  xt{1};
 learning_rate = params.learning_rate_1;
@@ -371,6 +376,15 @@ while true
                 i = i+1;
             end
 
+%             for iii = 1: 42
+%                 lambda2_norm(seq.frame) = admm_lambda_2/2 * norm(M_train(:,:,iii) - sum(beta_k(:,:,iii)  .* model_xf(:,:,iii)  .* q_f(:,:,iii) , 3), 2);
+%             end
+%             figure(105)
+%             plot(lambda2_norm);
+%             
+%             figure(101)
+%             bar(reshape(real(beta_k), 1 ,[]))
+
             cf_f{k} = q_f;  
     end
     if(seq.frame == 1)
@@ -401,7 +415,7 @@ while true
             max_M_curr = max(M_curr(:));
 
             [id_ymax_curr, id_xmax_curr] = find(M_curr == max_M_curr);
-            shift_y = 1 - id_ymax_curr;
+            shift_y = 1 - id_ymax_curr;%直接把最大值移位到（1，1），与y一致
             shift_x = 1 - id_xmax_curr;
             Prev_response_d{1} = circshift(Prev_response_d{1},shift_y(1),1);
             Prev_response_d{1} = circshift(Prev_response_d{1},shift_x(1),2);
