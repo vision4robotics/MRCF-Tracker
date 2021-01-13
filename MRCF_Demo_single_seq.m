@@ -46,7 +46,7 @@ for idxSeq=1:length(seqs)
 
     subS.name = [subS.name '_' num2str(idx)];
     
-    res = run_DCCF(subS, 0, 0);
+    res = run_MRCF(subS, 0, 0);
 
     res.len = subS.len;
     res.annoBegin = subS.annoBegin;

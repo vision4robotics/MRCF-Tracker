@@ -203,8 +203,8 @@ response_d = xt;
 % end
 Prev_response_d{1} =  xt{1};
 Prev_response_d{2} =  xt{1};
-learning_rate = params.learning_rate_1;
-learning_rate2 = params.learning_rate_2;
+learning_rate = params.learning_rate;
+% learning_rate2 = params.learning_rate_2;
 %% Main loop here
 while true
     % Read image
@@ -222,9 +222,9 @@ while true
 
     tic();
     
-    if seq.frame > 15
-        learning_rate = learning_rate2;
-    end 
+%     if seq.frame > 15
+%         learning_rate = learning_rate2;
+%     end 
     
     % Target localization step
     
